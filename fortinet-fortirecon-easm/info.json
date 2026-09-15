@@ -6,9 +6,9 @@
   "contributor": "Ramkrushna Pathade",
   "cs_approved": true,
   "cs_compatible": true,
-  "version": "1.2.0",
+  "version": "1.2.2",
   "category": "Attack Surface Management",
-  "help_online": "https://docs.fortinet.com/document/fortisoar/1.1.0/fortinet-fortirecon-easm/860/fortinet-fortirecon-easm-v1-1-0",
+  "help_online": "https://docs.fortinet.com/document/fortisoar/1.2.2/fortinet-fortirecon-easm/122/fortinet-fortirecon-easm-v1-2-2",
   "icon_small_name": "small.png",
   "icon_large_name": "large.png",
   "configuration": {
@@ -77,7 +77,8 @@
             "breach_id": "",
             "breach_date": "",
             "breach_name": "",
-            "has_password": ""
+            "has_password": "",
+            "plaintext_passwords": []
           }
         ]
       },
@@ -153,6 +154,20 @@
           ]
         },
         {
+          "name": "show_plaintext_password",
+          "title": "Show Plaintext Password",
+          "type": "select",
+          "editable": true,
+          "visible": true,
+          "required": false,
+          "tooltip": "Select true if plaintext password needs to show in response. Default is false.",
+          "description": "(Optional) Select to show password in plaintext in the response.",
+          "options": [
+            "false",
+            "true"
+          ]
+        },
+        {
           "name": "start_date",
           "title": "Start Date",
           "type": "datetime",
@@ -169,8 +184,8 @@
           "editable": true,
           "visible": true,
           "required": false,
-          "tooltip": "Specify the end date to filter the credential leak discovery date. The default is the current day's date.",
-          "description": "(Optional) Specify the end date to filter the credential leak discovery date. The default is the current day's date."
+          "tooltip": "Specify the end date to filter the credential leak discovery date. Parameter start_date is mandatory parameter if end_date is given. The default is the current day's date.",
+          "description": "(Optional) Specify the end date to filter the credential leak discovery date. Parameter start_date is mandatory parameter if end_date is given. The default is the current day's date."
         },
         {
           "name": "page",
@@ -314,12 +329,16 @@
             "asset_type": "",
             "country": "",
             "severity": "",
+            "nvd_severity": "",
+            "recon_severity": "",
             "port": "",
             "bucket": "",
             "status": "",
             "user_name": "",
             "issue_name_identifier": "",
-            "bucket_id": ""
+            "bucket_id": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -352,6 +371,38 @@
           "required": false,
           "tooltip": "Select the severity to filter the results.",
           "description": "(Optional) Select the severity to filter the results. You can choose from the following options: Critical, High, Medium or Low",
+          "options": [
+            "Critical",
+            "High",
+            "Medium",
+            "Low"
+          ]
+        },
+        {
+          "name": "nvd_severity",
+          "title": "NVD Severity",
+          "type": "select",
+          "editable": true,
+          "visible": true,
+          "required": false,
+          "tooltip": "Select the NVD severity to filter the results. You can choose from the following options: Critical, High, Medium or Low",
+          "description": "(Optional) Select the NVD severity to filter the results. You can choose from the following options: Critical, High, Medium or Low",
+          "options": [
+            "Critical",
+            "High",
+            "Medium",
+            "Low"
+          ]
+        },
+        {
+          "name": "recon_severity",
+          "title": "Recon Severity",
+          "type": "select",
+          "editable": true,
+          "visible": true,
+          "required": false,
+          "tooltip": "Select the Recon severity to filter the results. You can choose from the following options: Critical, High, Medium or Low",
+          "description": "(Optional) Select the Recon severity to filter the results. You can choose from the following options: Critical, High, Medium or Low",
           "options": [
             "Critical",
             "High",
@@ -501,11 +552,32 @@
           "required": false,
           "tooltip": "Select whether to fetch results for items created before or after the primary scan.",
           "description": "(Optional) Select whether to fetch results for items created before or after the primary scan. You can choose from following options: True: Select this option to fetch results for items created after the primary scan. False: Select this option to fetch results for items created before the primary scan.",
-          "options":
-          [
+          "options": [
             "True",
             "False"
           ]
+        },
+        {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`) "
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
         },
         {
           "name": "page",
@@ -560,12 +632,16 @@
         "asset_type": "",
         "country": "",
         "severity": "",
+        "nvd_severity": "",
+        "recon_severity": "",
         "port": "",
         "bucket": "",
         "status": "",
         "user_name": "",
         "issue_name_identifier": "",
-        "bucket_id": ""
+        "bucket_id": "",
+        "created_ts": "",
+        "modified_ts": ""
       },
       "parameters": [
         {
@@ -687,6 +763,8 @@
                 "name": ""
               }
             ],
+            "created_ts": "",
+            "modified_ts": "",
             "user_name": ""
           }
         ],
@@ -782,6 +860,28 @@
           "description": "(Optional) Specify the group ID to filter retrieved results. You can specify multiple group IDs as comma-separated values. It returns results if it matches all of the specified groups, operating as an 'AND filter'."
         },
         {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
           "name": "page",
           "value": 1,
           "title": "Page",
@@ -834,7 +934,9 @@
               }
             ],
             "user_action": "",
-            "user_name": ""
+            "user_name": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -929,6 +1031,28 @@
           "description": "(Optional) Specify the group ID to filter retrieved results. You can specify multiple group IDs as comma-separated values. It returns results if it matches all of the specified groups, operating as an 'AND filter'."
         },
         {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
           "name": "page",
           "value": 1,
           "title": "Page",
@@ -976,6 +1100,8 @@
               }
             ],
             "id": "",
+            "created_ts": "",
+            "modified_ts": "",
             "tags": [
               {
                 "id": "",
@@ -1099,6 +1225,28 @@
           "description": "(Optional) Specify the cloud metadata in JSON format to filter the results. Available fields are: integration_id, cloud_provider, account_id, resource_id, resource_group, resource_name, resource_type, region, and subscription_id. For example: { \"cloud_provider\": [ \"azure\" ], \"region\": [ \"westus2\" ], \"integration_id\": [ \"777408f550e5rrdd1hjf3w90\" ], \"resource_name\": [ \"TestAssetsPublic\" ] }"
         },
         {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
           "name": "page",
           "value": 1,
           "title": "Page",
@@ -1153,6 +1301,8 @@
             "assets_linked_count": "",
             "company_name": "",
             "fgt_metadata": {},
+            "created_ts": "",
+            "modified_ts": "",
             "discovery_path": [
               {
                 "source": "",
@@ -1273,6 +1423,14 @@
             "id": "",
             "ip_address": "",
             "nameserver": [],
+            "discovery_path": [
+              {
+                "from":"",
+                "type": "",
+                "module": "",
+                "from_type": ""
+              }
+            ],
             "original_ip": [],
             "ports": [],
             "ssl_cert_org": "",
@@ -1282,7 +1440,9 @@
                 "name": ""
               }
             ],
-            "technologies": []
+            "technologies": [],
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -1449,6 +1609,28 @@
           "description": "(Optional) Specify the cloud metadata in JSON format to filter the results. Available fields are: integration_id, cloud_provider, account_id, resource_id, resource_group, resource_name, resource_type, region, and subscription_id. For example: { \"cloud_provider\": [ \"azure\" ], \"region\": [ \"westus2\" ], \"integration_id\": [ \"777408f550e5rrdd1hjf3w90\" ], \"resource_name\": [ \"TestAssetsPublic\" ] }"
         },
         {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
           "name": "page",
           "value": 1,
           "title": "Page",
@@ -1537,6 +1719,8 @@
             },
             "assets_linked_count": "",
             "issue_count": "",
+            "created_ts": "",
+            "modified_ts": "",
             "discovery_path": [
               {
                 "source": "",
@@ -1653,29 +1837,40 @@
         "page": "",
         "size": "",
         "hits": [
+         {
+        "id": "",
+        "tags": [
           {
-            "tags": [
-              {
-                "id": "",
-                "name": ""
-              }
-            ],
-            "groups": [
-              {
-                "id": "",
-                "name": ""
-              }
-            ],
             "id": "",
-            "ip_prefix": "",
-            "asset": "",
-            "ports": [],
-            "cloud_metadata": {},
-            "fgt_metadata": {},
-            "assets_linked_count": "",
-            "version": ""
+            "name": ""
           }
-        ]
+        ],
+        "asset": "",
+        "ports": [],
+        "groups": [
+          {
+            "id": "",
+            "name": ""
+          }
+        ],
+        "version": "",
+        "ip_prefix": null,
+        "created_ts": "",
+        "modified_ts": "",
+        "fgt_metadata": {},
+        "cloud_metadata": {},
+        "discovery_path": [
+          {
+            "from": "",
+            "type": "",
+            "module": "",
+            "from_type": ""
+          }
+        ],
+        "assets_linked_count": ""
+      }
+
+    ]
       },
       "parameters": [
         {
@@ -1862,6 +2057,28 @@
           "description": "(Optional) Specify the cloud metadata in JSON format to filter the results. Available fields are: integration_id, cloud_provider, account_id, resource_id, resource_group, resource_name, resource_type, region, and subscription_id. For example: { \"cloud_provider\": [ \"azure\" ], \"region\": [ \"westus2\" ], \"integration_id\": [ \"777408f550e5rrdd1hjf3w90\" ], \"resource_name\": [ \"TestAssetsPublic\" ] }"
         },
         {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
           "name": "page",
           "value": 1,
           "title": "Page",
@@ -1915,6 +2132,8 @@
             "assets_linked_count": "",
             "version": "",
             "issue_count": "",
+            "created_ts": "",
+            "modified_ts": "",
             "discovery_path": [
               {
                 "source": "",
@@ -2004,6 +2223,14 @@
             "assets_linked_count": "",
             "company_name": "",
             "fgt_metadata": {},
+            "discovery_path": [
+          {
+            "from": "",
+            "type": "",
+            "module": "",
+            "from_type": ""
+          }
+        ],
             "groups": [
               {
                 "id": "",
@@ -2019,7 +2246,9 @@
                 "name": ""
               }
             ],
-            "version": ""
+            "version": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -2162,6 +2391,28 @@
           "description": "(Optional) Specify the cloud metadata in JSON format to filter the results. Available fields are: integration_id, cloud_provider, account_id, resource_id, resource_group, resource_name, resource_type, region, and subscription_id. For example: { \"cloud_provider\": [ \"azure\" ], \"region\": [ \"westus2\" ], \"integration_id\": [ \"777408f550e5rrdd1hjf3w90\" ], \"resource_name\": [ \"TestAssetsPublic\" ] }"
         },
         {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
           "name": "page",
           "value": 1,
           "title": "Page",
@@ -2228,7 +2479,9 @@
                 "target": "",
                 "data_type": ""
               }
-            ]
+            ],
+            "created_ts": "",
+            "modified_ts": ""
           }
         },
         {
@@ -2264,7 +2517,9 @@
                 "data_type": ""
               }
             ],
-            "assets_linked_count": ""
+            "assets_linked_count": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         }
       ],
@@ -2318,7 +2573,10 @@
             "domain_name": "",
             "fgt_metadata": {},
             "technologies": [],
-            "cloud_metadata": {}
+            "discovery_path": [],
+            "cloud_metadata": {},
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -2495,6 +2753,28 @@
           "description": "(Optional) Specify the cloud metadata in JSON format to filter the results. Available fields are: integration_id, cloud_provider, account_id, resource_id, resource_group, resource_name, resource_type, region, and subscription_id. For example: { \"cloud_provider\": [ \"azure\" ], \"region\": [ \"westus2\" ], \"integration_id\": [ \"777408f550e5rrdd1hjf3w90\" ], \"resource_name\": [ \"TestAssetsPublic\" ] }"
         },
         {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
           "name": "page",
           "value": 1,
           "title": "Page",
@@ -2538,7 +2818,12 @@
         ],
         "asset": "",
         "ports": [],
-        "groups": [],
+        "groups": [
+          {
+            "id": "",
+            "name": ""
+          }
+        ],
         "ip_address": "",
         "domain_name": "",
         "issue_count": "",
@@ -2553,7 +2838,9 @@
             "target": "",
             "data_type": ""
           }
-        ]
+        ],
+        "created_ts": "",
+        "modified_ts": ""
       },
       "parameters": [
         {
@@ -3012,7 +3299,9 @@
             "service_banner": "",
             "ssl": {},
             "subdomains": [],
-            "version": ""
+            "version": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -3070,7 +3359,8 @@
           "editable": true,
           "visible": true,
           "required": false,
-          "tooltip": "Specify the keywords in the service banner, to filter the results, from retrieved exposed services. Note: Please do not use *, it is implicitly added.",
+          "tooltip": "Specify the keywords in the service banner, to filter the results, from retrieved exposed services. Note: Please do not use *, it is implicitly added.  Allowed special characters are [.-/]",
+          "placeholder": "For example: This is , a banner, Then Search with: banner",
           "description": "(Optional) Specify the keywords in the service banner to filter the retrieved exposed services. NOTE: Do not use *; it is added implicitly."
         },
         {
@@ -3100,6 +3390,28 @@
             "True",
             "False"
           ]
+        },
+        {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
         },
         {
           "name": "page",
@@ -3142,7 +3454,9 @@
             "provider": "",
             "account_id": "",
             "policy_errors": [],
-            "connection_status": ""
+            "connection_status": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -3178,6 +3492,28 @@
             "Failed",
             "Success"
           ]
+        },
+        {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
         },
         {
           "name": "page",
@@ -3222,7 +3558,9 @@
             "is_ssl": "",
             "verify_ssl": "",
             "policy_errors": [],
-            "connection_status": ""
+            "connection_status": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -3243,6 +3581,28 @@
             "Failed",
             "Success"
           ]
+        },
+        {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
         },
         {
           "name": "page",
@@ -3334,7 +3694,9 @@
           {
             "text": "",
             "user_name": "",
-            "comment_type": ""
+            "comment_type": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -3366,6 +3728,28 @@
             "System",
             "User"
           ]
+        },
+        {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
         },
         {
           "name": "page",
@@ -3406,7 +3790,9 @@
           {
             "text": "",
             "user_name": "",
-            "comment_type": ""
+            "comment_type": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -3437,6 +3823,28 @@
             "System",
             "User"
           ]
+        },
+        {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
         },
         {
           "name": "page",
@@ -3479,7 +3887,9 @@
             "name": "",
             "scope": "",
             "description": "",
-            "linked_assets_count": ""
+            "linked_assets_count": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -3510,6 +3920,28 @@
           "required": false,
           "tooltip": "Specify the name of tag which you want to retrieve. Name are matched partially.",
           "description": "(Optional) Specify the name of tag to retrieve. Names are matched partially."
+        },
+        {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
         },
         {
           "name": "page",
@@ -3547,14 +3979,16 @@
       "enabled": true,
       "conditional_output_schema": [
         {
-          "condition": "{{ linked_assets==true }}",
+          "condition": "{{ linked_assets == true }}",
           "output_schema": {
             "id": "",
             "name": "",
             "scope": "",
             "description": "",
             "linked_assets": [],
-            "linked_assets_count": ""
+            "linked_assets_count": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         },
         {
@@ -3564,7 +3998,9 @@
             "name": "",
             "scope": "",
             "description": "",
-            "linked_assets_count": ""
+            "linked_assets_count": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         }
       ],
@@ -3608,7 +4044,9 @@
             "name": "",
             "scope": "",
             "description": "",
-            "linked_assets_count": ""
+            "linked_assets_count": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         ],
         "page": "",
@@ -3639,6 +4077,28 @@
           "required": false,
           "tooltip": "Specify the name of group which you want to retrieve. Name are matched partially.",
           "description": "(Optional) Specify the name of group which you want to retrieve. Name are matched partially."
+        },
+        {
+          "title": "Created Time",
+          "name": "created_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the created time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
+        },
+        {
+          "title": "Modified Time",
+          "name": "modified_ts",
+          "type": "text",
+          "visible": true,
+          "editable": true,
+          "required": false,
+          "placeholder": "Format: YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS",
+          "tooltip": "Range consists of start_date and end_date separated by `TO`. Both start and end values can be in either date-only or full datetime format.",
+          "description": "(Optional) Specify the time range to filter results based on the modified time. The following are the accepted formats: (`YYYY-MM-DDTHH:MM:SS TO YYYY-MM-DDTHH:MM:SS`), (`YYYY-MM-DD TO YYYY-MM-DD`). Example: (`2022-03-25T09:50:21.770+00:00 TO 2022-03-25T14:24:05.000+00:00`, `2022-03-25TO2022-03-25T14:24:05.000+00:00`, `2022-03-25 TO 2022-03-25`)"
         },
         {
           "name": "page",
@@ -3683,7 +4143,9 @@
             "scope": "",
             "description": "",
             "linked_assets": [],
-            "linked_assets_count": ""
+            "linked_assets_count": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         },
         {
@@ -3693,7 +4155,9 @@
             "name": "",
             "scope": "",
             "description": "",
-            "linked_assets_count": ""
+            "linked_assets_count": "",
+            "created_ts": "",
+            "modified_ts": ""
           }
         }
       ],
@@ -3725,7 +4189,7 @@
       "operation": "update_archived_asset",
       "title": "Update Archived Asset",
       "annotation": "update_archived_asset",
-      "description": "Update the given asset ID status to active. It removes the given asset from archived assets but its linked assets will still be there in the archived.Asset will be shown on the profile settings seeds section immediately. However, asset will get scanned again within 24 hours and will be shown on the active assets, if any issues found during scan those will be shown on the issues page.",
+      "description": "Updates a specific asset's status to 'Active' based on the asset ID specified. This action removes the specified asset from archived assets; however, its linked assets remain in the archive. The asset will be shown immediately in the profile settings 'seed' section. However, the asset gets scanned again within 24 hours and will then be shown in active assets. If any issues are found during the scan, they are shown on the issues page.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3741,8 +4205,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the archived asset ID to update the status to active.",
-          "tooltip": "Specify the archived asset ID to update the status to active."
+          "description": "Specify the ID of the archived asset you want to update to 'Active'.",
+          "tooltip": "Specify the ID of the archived asset you want to update to 'Active'."
         }
       ]
     },
@@ -3750,7 +4214,7 @@
       "operation": "update_archived_issue",
       "title": "Mark Archived Issue as Active",
       "annotation": "update_archived_issue",
-      "description": "Updates the status of the archived security issue record to active.",
+      "description": "Updates the status of a specific archived security issue record to 'Active' based on the issue ID specified.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3766,8 +4230,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the archived issue ID to update the status to active.",
-          "tooltip": "Specify the archived issue ID to update the status to active."
+          "description": "Specify the ID of the archived issue you want to update to 'Active'.",
+          "tooltip": "Specify the ID of the archived issue you want to update to 'Active'."
         }
       ]
     },
@@ -3775,7 +4239,7 @@
       "operation": "update_issue_status",
       "title": "Update Issue Status",
       "annotation": "update_issue_status",
-      "description": "Updates the status of the Security issue record.\n If the given issue status is set to false_positive or risk_accepted then issue will be visible in the archived issues. You can choose from ACTIVE, RESOLVED, FALSE_POSITIVE, RISK_ACCEPTED.",
+      "description": "Updates the status of a specific security issue record based on the security issue ID specified. If the specified issue status is updated to false_positive or risk_accepted, it will appear in the archived issues.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3791,8 +4255,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the security issue ID to update the status.",
-          "tooltip": "Specify the security issue ID to update the status."
+          "description": "Specify the ID of the security issue you want to update.",
+          "tooltip": "Specify the ID of the security issue you want to update."
         },
         {
           "title": "Status",
@@ -3801,8 +4265,8 @@
           "visible": true,
           "editable": true,
           "required": true,
-          "tooltip": "Specify the status to update the security issue.",
-          "description": "Specify the status to update the security issue. You can choose from ACTIVE, RESOLVED, FALSE_POSITIVE, RISK_ACCEPTED.",
+          "tooltip": "Select the status to which you want to update the specified security issue. You can choose from the following options: ACTIVE, RESOLVED, FALSE_POSITIVE, or RISK_ACCEPTED.",
+          "description": "Select the status to which you want to update the specified security issue. You can choose from the following options: ACTIVE, RESOLVED, FALSE_POSITIVE, or RISK_ACCEPTED.",
           "options": [
             "ACTIVE",
             "RESOLVED",
@@ -3816,7 +4280,7 @@
       "operation": "update_asn_asset_status_to_false_positive",
       "title": "Update ASN Asset To False Positive",
       "annotation": "update_asn_asset_status_to_false_positive",
-      "description": "This API endpoint mark the given asset ID as false positive,\n it will also mark all its linked assets to false positive. \n Once assets are marked as false positive then those will be visible in the archived assets.\n All the issues which are found on the given asset will also get removed/deleted from the issues.",
+      "description": "Marks a specific ASN asset as a false positive based on the asset ID specified. This action also marks the specified ASN asset's linked assets as false positives. Once marked, these assets will appear in the archived assets. All issues associated with the specified ASN asset will be removed.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3832,8 +4296,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the ASN asset ID to update it to False Positive.",
-          "tooltip": "Specify the ASN asset ID to update it to False Positive."
+          "description": "Specify the ID of the ASN asset you want to update to 'False Positive'.",
+          "tooltip": "Specify the ID of the ASN asset you want to update to 'False Positive'."
         }
       ]
     },
@@ -3841,7 +4305,7 @@
       "operation": "update_prefix_asset_status_to_false_positive",
       "title": "Update IP Prefix Asset To False Positive",
       "annotation": "update_prefix_asset_status_to_false_positive",
-      "description": "This API endpoint mark the given asset ID as false positive,\n it will also mark all its linked assets to false positive. \n Once assets are marked as false positive then those will be visible in the archived assets.\n All the issues which are found on the given asset will also get removed/deleted from the issues.",
+      "description": "Marks a specific IP Prefix asset as a false positive based on the asset ID specified. This action also marks the specified IP Prefix asset's linked assets as false positives. Once marked, these assets will appear in the archived assets. All issues associated with the specified IP Prefix asset are also removed.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3857,8 +4321,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the Prefix asset ID to update it to False Positive.",
-          "tooltip": "Specify the Prefix asset ID to update it to False Positive."
+          "description": "Specify the ID of the IP Prefix asset you want to update to 'False Positive'.",
+          "tooltip": "Specify the ID of the IP Prefix asset you want to update to 'False Positive'."
         }
       ]
     },
@@ -3866,7 +4330,7 @@
       "operation": "update_ip_asset_status_to_false_positive",
       "title": "Update IP Asset To False Positive",
       "annotation": "update_ip_asset_status_to_false_positive",
-      "description": "This API endpoint mark the given asset ID as false positive,\n it will also mark all its linked assets to false positive. \n Once assets are marked as false positive then those will be visible in the archived assets.\n All the issues which are found on the given asset will also get removed/deleted from the issues.",
+      "description": "Marks a specific IP asset as a false positive based on the asset ID specified. This action also marks the specified IP asset's linked assets as false positives. Once marked, these assets will appear in the archived assets. All issues associated with the specified IP asset are also removed.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3882,8 +4346,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the IP asset ID to update it to False Positive.",
-          "tooltip": "Specify the IP asset ID to update it to False Positive."
+          "description": "Specify the ID of the IP asset you want to update to 'False Positive'.",
+          "tooltip": "Specify the ID of the IP asset you want to update to 'False Positive'."
         }
       ]
     },
@@ -3891,7 +4355,7 @@
       "operation": "update_domain_asset_status_to_false_positive",
       "title": "Update Domain Asset To False Positive",
       "annotation": "update_domain_asset_status_to_false_positive",
-      "description": "This API endpoint mark the given asset ID as false positive,\n it will also mark all its linked assets to false positive. \n Once assets are marked as false positive then those will be visible in the archived assets.\n All the issues which are found on the given asset will also get removed/deleted from the issues.",
+      "description": "Marks a specific domain asset as a false positive based on the asset ID specified. This action also marks the specified domain asset's linked assets as false positives. Once marked, these assets will appear in the archived assets. All issues associated with the specified domain asset are also removed.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3907,8 +4371,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the Domain asset ID to update it to False Positive.",
-          "tooltip": "Specify the Domain asset ID to update it to False Positive."
+          "description": "Specify the ID of the domain asset you want to update to 'False Positive'.",
+          "tooltip": "Specify the ID of the domain asset you want to update to 'False Positive'."
         }
       ]
     },
@@ -3916,7 +4380,7 @@
       "operation": "update_subdomain_asset_status_to_false_positive",
       "title": "Update Sub-Domain Asset To False Positive",
       "annotation": "update_subdomain_asset_status_to_false_positive",
-      "description": "This API endpoint mark the given asset ID as false positive,\n it will also mark all its linked assets to false positive. \n Once assets are marked as false positive then those will be visible in the archived assets.\n All the issues which are found on the given asset will also get removed/deleted from the issues.",
+      "description": "Marks a specific subdomain asset as a false positive based on the asset ID specified. This action also marks the specified subdomain asset's linked assets as false positives. Once marked, these assets will appear in the archived assets. All issues associated with the specified subdomain asset are also removed.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3932,8 +4396,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the Sub-Domain asset ID to update it to False Positive.",
-          "tooltip": "Specify the Sub-Domain asset ID to update it to False Positive."
+          "description": "Specify the ID of the subdomain asset you want to update to 'False Positive'. Note: This operation is not allowed on the same asset_id.",
+          "tooltip": "Specify the ID of the subdomain asset you want to update to 'False Positive'. Note: This operation is not allowed on the same asset_id."
         }
       ]
     },
@@ -3941,7 +4405,7 @@
       "operation": "update_leaked_credential_status",
       "title": "Update Leaked Credential Status",
       "annotation": "update_leaked_credential_status",
-      "description": "Updates the status of the Leaked Credential record.",
+      "description": "Updates the status of a specific leaked credential record to Active or Resolved, based on the leaked credential ID specified.",
       "category": "investigation",
       "is_config_required": true,
       "visible": true,
@@ -3957,8 +4421,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "description": "Specify the Leaked Credential ID to update the status.",
-          "tooltip": "Specify the Leaked Credential ID to update the status."
+          "description": "Specify the ID of the leaked credential you want to update.",
+          "tooltip": "Specify the ID of the leaked credential you want to update."
         },
         {
           "title": "Status",
@@ -3967,11 +4431,100 @@
           "visible": true,
           "editable": true,
           "required": true,
-          "tooltip": "Specify the status to update the Leaked Credential.",
-          "description": "Specify the status to update the Leaked Credential. You can choose from ACTIVE, RESOLVED.",
+          "tooltip": "Select the status to which you want to update the specified leaked credential. You can choose either ACTIVE or RESOLVED.",
+          "description": "Select the status to which you want to update the specified leaked credential. You can choose either ACTIVE or RESOLVED.",
           "options": [
             "ACTIVE",
             "RESOLVED"
+          ]
+        }
+      ]
+    },
+    {
+      "operation": "create_task",
+      "title": "Create Task",
+      "annotation": "create_task",
+      "description": "Create task",
+      "category": "investigation",
+      "is_config_required": true,
+      "visible": false,
+      "enabled": true,
+      "output_schema": {
+        "id": "",
+        "message": ""
+      },
+      "parameters": [
+        {
+          "title": "Requester",
+          "name": "requester",
+          "type": "text",
+          "visible": false,
+          "editable": true,
+          "required": false,
+          "placeholder": "",
+          "tooltip": "Requestor actor user",
+          "description": "Requestor actor."
+        },
+        {
+          "title": "Request",
+          "name": "request",
+          "type": "text",
+          "visible": false,
+          "editable": true,
+          "required": false,
+          "placeholder": "",
+          "tooltip": "Request message.",
+          "description": "Request message."
+        },
+        {
+          "title": "Task ID",
+          "name": "taskId",
+          "type": "text",
+          "visible": false,
+          "editable": true,
+          "required": false,
+          "placeholder": "",
+          "tooltip": "Task ID",
+          "description": "Task ID."
+        }
+      ]
+    },
+    {
+      "operation": "update_task",
+      "title": "Update task",
+      "annotation": "update_task",
+      "description": "Update task",
+      "category": "investigation",
+      "is_config_required": true,
+      "visible": false,
+      "enabled": true,
+      "output_schema": {
+        "status": ""
+      },
+      "parameters": [
+        {
+          "name": "task_id",
+          "title": "Task ID",
+          "type": "text",
+          "editable": true,
+          "visible": false,
+          "required": true,
+          "description": "Specify the task ID to update the status.",
+          "tooltip": "Specify the task ID to update the status."
+        },
+        {
+          "title": "Status",
+          "name": "status",
+          "type": "select",
+          "visible": false,
+          "editable": true,
+          "required": true,
+          "tooltip": "Specify the status to update the Task.",
+          "description": "Specify the status to update the task. You can choose from pending, failed, completed.",
+          "options": [
+            "completed",
+            "pending",
+            "failed"
           ]
         }
       ]

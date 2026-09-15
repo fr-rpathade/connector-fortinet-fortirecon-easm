@@ -1,8 +1,9 @@
-""" Copyright start
-Copyright (C) 2008 - 2024 Fortinet Inc.
-All rights reserved.
-FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE
-Copyright end """
+"""
+Copyright start
+MIT License
+Copyright (c) 2026 Fortinet Inc
+Copyright end
+"""
 from .make_rest_api_call import *
 from .constants import (STATUS_MAPPING,
                         SEVERITY_MAPPING,
@@ -18,9 +19,11 @@ def get_issues_discovered(config, params):
     asset_type = params.get("asset_type")
     if status:
         params["status"] = STATUS_MAPPING.get(status)
-    severity = params.get("severity")
-    if severity:
-        params["severity"] = SEVERITY_MAPPING.get(severity)
+
+    sev_params = ["severity", "nvd_severity", "recon_severity"]
+    for sev in sev_params:
+        _map_severity_value(params, sev)
+
     if asset_type:
         params["asset_type"] = ASSET_TYPE_MAPPING.get(asset_type)
     bucket_id = params.get("bucket_id")
@@ -143,3 +146,8 @@ def update_issue_status(config, params):
     print(endpoint)
     response = MK.make_request(endpoint=endpoint, method="PATCH", params=params, data=payload)
     return response
+
+def _map_severity_value(params: dict, sev_param: str):
+    severity = params.get(sev_param)
+    if severity:
+        params[sev_param] = SEVERITY_MAPPING.get(severity)

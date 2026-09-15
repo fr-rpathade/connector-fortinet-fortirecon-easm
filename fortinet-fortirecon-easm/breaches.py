@@ -1,8 +1,9 @@
-""" Copyright start
-Copyright (C) 2008 - 2024 Fortinet Inc.
-All rights reserved.
-FORTINET CONFIDENTIAL & FORTINET PROPRIETARY SOURCE CODE
-Copyright end """
+"""
+Copyright start
+MIT License
+Copyright (c) 2026 Fortinet Inc
+Copyright end
+"""
 
 from .assets import get_multiple_records
 from .make_rest_api_call import MakeRestApiCall
@@ -11,9 +12,7 @@ from datetime import datetime
 
 def get_breaches(config, params):
     endpoint = "/easm/{org_id}/breaches"
-    has_password = params.get("has_password")
-    if has_password:
-        params["has_password"] = has_password
+
     return get_multiple_records(config=config, endpoint=endpoint, params=params)
 
 
