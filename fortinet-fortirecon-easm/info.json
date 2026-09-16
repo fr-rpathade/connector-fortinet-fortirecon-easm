@@ -3892,8 +3892,8 @@
           "editable": true,
           "visible": true,
           "required": true,
-          "tooltip": "Specify the ID of the issue whose comments are to be added.",
-          "description": "Specify the ID of the issue whose comments are to be added."
+          "tooltip": "Specify the ID of the issue whose comment to be added.",
+          "description": "Specify the ID of the issue whose comment to be added."
         },
         {
           "title": "Text",
