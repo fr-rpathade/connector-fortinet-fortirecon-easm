@@ -88,6 +88,15 @@ def get_issue_comments(config, params):
     return response
 
 
+def add_issue_comments(config, params):
+    MK = MakeRestApiCall(config=config)
+    endpoint = "/easm/{org_id}/issues" + "/{0}/comments".format(params.pop('issue_id'))
+    payload = MK.build_payload(params)
+    response = MK.make_request(endpoint=endpoint, method="POST", data=payload)
+    return response
+
+
+
 def get_archived_assets(config, params):
     MK = MakeRestApiCall(config=config)
     asset_type = params.get("asset_type")

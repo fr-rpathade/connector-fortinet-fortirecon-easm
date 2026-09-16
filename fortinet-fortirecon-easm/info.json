@@ -3872,6 +3872,32 @@
       ]
     },
     {
+      "operation": "add_issue_comments",
+      "title": "Add Issue Comments",
+      "annotation": "add_issue_comments",
+      "description": "Add notes or comments to a security issue using its ID.",
+      "category": "investigation",
+      "is_config_required": true,
+      "visible": true,
+      "enabled": true,
+      "output_schema": {
+        "success": "",
+        "message": ""
+      },
+      "parameters": [
+        {
+          "title": "Text",
+          "name": "text",
+          "type": "text",
+          "editable": true,
+          "visible": true,
+          "required": true,
+          "tooltip": "Comment note for issue id. Maximum allowed character is 1000.",
+          "description": "Comment note for issue id. Maximum allowed character is 1000."
+        }
+      ]
+    },
+    {
       "operation": "get_tags",
       "title": "Get Tags",
       "annotation": "get_tags",
