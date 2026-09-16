@@ -3886,14 +3886,24 @@
       },
       "parameters": [
         {
+          "title": "Issue ID",
+          "name": "issue_id",
+          "type": "text",
+          "editable": true,
+          "visible": true,
+          "required": true,
+          "tooltip": "Specify the ID of the issue whose comments are to be added.",
+          "description": "Specify the ID of the issue whose comments are to be added."
+        },
+        {
           "title": "Text",
           "name": "text",
           "type": "text",
           "editable": true,
           "visible": true,
           "required": true,
-          "tooltip": "Comment note for issue id. Maximum allowed character is 1000.",
-          "description": "Comment note for issue id. Maximum allowed character is 1000."
+          "tooltip": "Comment note for specified issue ID. Maximum allowed character for comment is 1000.",
+          "description": "Comment note for specified issue ID. Maximum allowed character for comment is 1000."
         }
       ]
     },

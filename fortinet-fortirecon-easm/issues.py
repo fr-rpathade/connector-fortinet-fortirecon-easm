@@ -96,7 +96,6 @@ def add_issue_comments(config, params):
     return response
 
 
-
 def get_archived_assets(config, params):
     MK = MakeRestApiCall(config=config)
     asset_type = params.get("asset_type")
