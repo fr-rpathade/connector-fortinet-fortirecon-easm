@@ -3872,6 +3872,42 @@
       ]
     },
     {
+      "operation": "add_issue_comments",
+      "title": "Add Issue Comments",
+      "annotation": "add_issue_comments",
+      "description": "Add notes or comments to a security issue using its ID.",
+      "category": "investigation",
+      "is_config_required": true,
+      "visible": true,
+      "enabled": true,
+      "output_schema": {
+        "success": "",
+        "message": ""
+      },
+      "parameters": [
+        {
+          "title": "Issue ID",
+          "name": "issue_id",
+          "type": "text",
+          "editable": true,
+          "visible": true,
+          "required": true,
+          "tooltip": "Specify the ID of the issue whose comment to be added.",
+          "description": "Specify the ID of the issue whose comment to be added."
+        },
+        {
+          "title": "Text",
+          "name": "text",
+          "type": "text",
+          "editable": true,
+          "visible": true,
+          "required": true,
+          "tooltip": "Comment note for specified issue ID. Maximum allowed character for comment is 1000.",
+          "description": "Comment note for specified issue ID. Maximum allowed character for comment is 1000."
+        }
+      ]
+    },
+    {
       "operation": "get_tags",
       "title": "Get Tags",
       "annotation": "get_tags",

@@ -43,6 +43,7 @@ operations = {
     "get_security_insights": get_security_insights,
     "get_archived_issue_comments": get_archived_issue_comments,
     "get_issue_comments": get_issue_comments,
+    "add_issue_comments": add_issue_comments,
     "get_tags": get_tags,
     "get_tag_by_id": get_tags,
     "get_groups": get_groups,
